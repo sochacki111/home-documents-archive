@@ -12,7 +12,7 @@ export class Document {
   description: string;
 
   @Prop()
-  file: mongoose.Types.Buffer;
+  image: string;
 }
 
 export const DocumentSchema = SchemaFactory.createForClass(Document);
