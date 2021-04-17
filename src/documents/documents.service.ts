@@ -12,7 +12,6 @@ export class DocumentsService {
   ) {}
 
   async create(createDocumentDto: any): Promise<Document> {
-    // console.log(createDocumentDto);
 
     const createdDocument = new this.documentModel(createDocumentDto);
     return createdDocument.save();

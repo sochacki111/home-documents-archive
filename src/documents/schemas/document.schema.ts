@@ -5,6 +5,11 @@ export type DocumentDocument = Document & mongoose.Document;
 
 @Schema()
 export class Document {
+  // TODO Add documentOwner
+  // _id: string;
+  // @Prop()
+  // _id?: mongoose.Schema.Types.ObjectId;
+
   @Prop()
   title: string;
 
