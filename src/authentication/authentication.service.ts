@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import TokenPayload from './tokenPayload.interface';
 import * as mongoose from 'mongoose';
 
+@Injectable()
 export class AuthenticationService {
   constructor(
     private readonly usersService: UsersService,
@@ -15,8 +16,8 @@ export class AuthenticationService {
   ) {}
 
   public async register(registrationData: RegisterDto) {
-    const hashedPassword = await bcrypt.hash(registrationData.password, 10);
     try {
+      const hashedPassword = await bcrypt.hash(registrationData.password, 10);
       const createdUser = await this.usersService.create({
         ...registrationData,
         password: hashedPassword,
@@ -25,16 +26,14 @@ export class AuthenticationService {
       return createdUser;
     } catch (error) {
       console.log(error);
+
       if (error?.code) {
         throw new HttpException(
           'User with that email already exists',
           HttpStatus.BAD_REQUEST,
         );
       }
-      throw new HttpException(
-        'Something went wrong',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

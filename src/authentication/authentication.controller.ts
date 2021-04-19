@@ -11,18 +11,14 @@ import {
 import { Response } from 'express';
 import { AuthenticationService } from './authentication.service';
 import RegisterDto from './dto/register.dto';
-import RequestWithUser from './requestWithUser.interface';
+import RequestWithUser from './interfaces/requestWithUser.interface';
+import RequestWithUserWithId from './interfaces/requestWithUserWithId.interface';
 import { LocalAuthenticationGuard } from './localAuthentication.guard';
 import JwtAuthenticationGuard from '../authentication/jwt-authentication.guard';
 
 @Controller('authentication')
 export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
-
-  @Get()
-  findAll(): string {
-    return 'This action returns all cats';
-  }
 
   @Post('register')
   async register(@Body() registrationData: RegisterDto) {
@@ -32,7 +28,10 @@ export class AuthenticationController {
   @HttpCode(200)
   @UseGuards(LocalAuthenticationGuard)
   @Post('log-in')
-  async logIn(@Req() request: RequestWithUser, @Res() response: Response) {
+  async logIn(
+    @Req() request: RequestWithUserWithId,
+    @Res() response: Response,
+  ) {
     const { user } = request;
     const cookie = this.authenticationService.getCookieWithJwtToken(user._id);
     response.setHeader('Set-Cookie', cookie);
@@ -50,11 +49,11 @@ export class AuthenticationController {
     return response.sendStatus(200);
   }
 
-  // @UseGuards(JwtAuthenticationGuard)
-  // @Get()
-  // authenticate(@Req() request: RequestWithUser) {
-  //   const user = request.user;
-  //   user.password = undefined;
-  //   return user;
-  // }
+  @UseGuards(JwtAuthenticationGuard)
+  @Get()
+  authenticate(@Req() request: RequestWithUser) {
+    const user = request.user;
+    user.password = undefined;
+    return user;
+  }
 }
