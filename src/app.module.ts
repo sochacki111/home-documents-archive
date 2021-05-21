@@ -7,6 +7,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { UsersModule } from './users/users.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ConfigModule } from '@nestjs/config';
+import { FilesModule } from './files/files.module';
 import * as Joi from '@hapi/joi';
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import * as Joi from '@hapi/joi';
         JWT_EXPIRATION_TIME: Joi.string().required(),
       }),
     }),
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
