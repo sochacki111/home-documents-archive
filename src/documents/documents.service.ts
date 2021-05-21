@@ -12,12 +12,15 @@ export class DocumentsService {
   ) {}
 
   async create(createDocumentDto: any): Promise<Document> {
-
     const createdDocument = new this.documentModel(createDocumentDto);
     return createdDocument.save();
   }
 
   async findAll(): Promise<Document[]> {
     return this.documentModel.find().exec();
+  }
+
+  async findOne(id: string): Promise<Document> {
+    return this.documentModel.findById(id).exec();
   }
 }
