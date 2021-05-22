@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateDocumentDto } from './dto/create-document.dto';
 import { Document, DocumentDocument } from './schemas/document.schema';
 
 @Injectable()
@@ -12,7 +11,11 @@ export class DocumentsService {
   ) {}
 
   async create(createDocumentDto: any): Promise<Document> {
-    const createdDocument = new this.documentModel(createDocumentDto);
+    const createdDocument = new this.documentModel({
+      title: createDocumentDto.title,
+      description: createDocumentDto.description,
+      image: `${process.env.DOMAIN}:${process.env.PORT}/files/${createDocumentDto.image}`,
+    });
     return createdDocument.save();
   }
 

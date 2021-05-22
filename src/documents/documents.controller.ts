@@ -2,21 +2,17 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   UploadedFile,
   UseInterceptors,
-  Res,
-  Param,
-  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
+import { diskStorage } from 'multer';
+import { imageFileFilter, setFileName } from '../utils/file-upload.utils';
 import { DocumentsService } from './documents.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { Document } from './schemas/document.schema';
-import { diskStorage } from 'multer';
-import { setFileName, imageFileFilter } from '../utils/file-upload.utils';
-import JwtAuthenticationGuard from '../authentication/jwt-authentication.guard';
 
 @Controller('documents')
 export class DocumentsController {
@@ -38,28 +34,10 @@ export class DocumentsController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     // TODO Make saving image and in database atomic
-    console.log(file);
-    // const createdDocument = await Document.create({
-    //   ...createDocumentDto,
-    //   image: file.path,
-    // });
     await this.documentsService.create({
       ...createDocumentDto,
-      image: file.path,
+      image: file.filename,
     });
-    // console.log(createDocumentDto);
-    // console.log({ createDocumentDto, file });
-    // console.log({ createDocumentDto, ...file });
-    // console.log({ ...createDocumentDto, ...file });
-    // console.log({ ...createDocumentDto, file });
-
-    // await this.documentsService.create({ createDocumentDto, file });
-    // await this.documentsService.create(createDocumentDto);
-
-    // await this.documentsService.create({
-    //   ...createDocumentDto,
-    //   file: file.buffer,
-    // });
 
     const response = {
       originalname: file.originalname,
@@ -69,17 +47,12 @@ export class DocumentsController {
   }
 
   @Get()
-  findAll2(): string {
-    return 'This action returns all cats';
+  async findAll(): Promise<Document[]> {
+    return this.documentsService.findAll();
   }
 
-  // @Get()
-  // async findAll(): Promise<Document[]> {
-  //   return this.documentsService.findAll();
-  // }
-
-  // @Get(':imgpath')
-  // seeUploadedFile(@Param('imgpath') image, @Res() res) {
-  //   return res.sendFile(image, { root: './files' });
-  // }
+  @Get(':id')
+  async findOne(@Param() params): Promise<Document> {
+    return this.documentsService.findOne(params.id);
+  }
 }

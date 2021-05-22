@@ -1,8 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { FilesService } from './files.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Header,
+  Param,
+  Patch,
+  Post,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
-
+import { FilesService } from './files.service';
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
@@ -17,9 +27,12 @@ export class FilesController {
     return this.filesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.filesService.findOne(+id);
+  @Get(':fileName')
+  @Header('Content-type', 'image/jpg')
+  @Header('Content-Disposition', 'inline; filename=test.jpg')
+  async findOne(@Param('fileName') fileName: string, @Res() res: Response) {
+    const docImg = await this.filesService.findOne(fileName);
+    return docImg.pipe(res);
   }
 
   @Patch(':id')
