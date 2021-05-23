@@ -10,11 +10,12 @@ export class DocumentsService {
     private readonly documentModel: Model<DocumentDocument>,
   ) {}
 
-  async create(createDocumentDto: any): Promise<Document> {
+  async create(createDocumentDto: any): Promise<DocumentDocument> {
     const createdDocument = new this.documentModel({
       title: createDocumentDto.title,
       description: createDocumentDto.description,
-      image: `${process.env.DOMAIN}:${process.env.PORT}/files/${createDocumentDto.image}`,
+      image: `http://${process.env.DOMAIN}:${process.env.PORT}/files/${createDocumentDto.image}`,
+      owner: createDocumentDto.owner,
     });
     return createdDocument.save();
   }

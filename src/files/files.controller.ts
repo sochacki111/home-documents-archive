@@ -29,7 +29,7 @@ export class FilesController {
 
   @Get(':fileName')
   @Header('Content-type', 'image/jpg')
-  @Header('Content-Disposition', 'inline; filename=test.jpg')
+  @Header('Content-Disposition', 'attachment; filename=test.jpg')
   async findOne(@Param('fileName') fileName: string, @Res() res: Response) {
     const docImg = await this.filesService.findOne(fileName);
     return docImg.pipe(res);

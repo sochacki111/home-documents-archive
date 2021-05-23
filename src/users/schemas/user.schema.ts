@@ -16,6 +16,9 @@ export class User {
 
   @Prop()
   public password: string;
+
+  @Prop({ ref: 'Documents' })
+  public documents: mongoose.Schema.Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
