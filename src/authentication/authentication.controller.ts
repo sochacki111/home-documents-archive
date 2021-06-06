@@ -34,6 +34,15 @@ export class AuthenticationController {
   ) {
     const { user } = request;
     const cookie = this.authenticationService.getCookieWithJwtToken(user._id);
+    response.setHeader(
+      'Access-Control-Allow-Origin',
+      process.env.FRONTEND_DOMAIN,
+    );
+    response.setHeader('Access-Control-Allow-Credentials', 'true');
+    response.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept',
+    );
     response.setHeader('Set-Cookie', cookie);
     user.password = undefined;
     return response.send(user);
