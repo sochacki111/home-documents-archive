@@ -22,7 +22,8 @@ import { imageFileFilter, setFileName } from '../utils/file-upload.utils';
 import { DocumentsService } from './documents.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { Document, DocumentDocument } from './schemas/document.schema';
-
+import { Multer } from 'multer';
+import { Express } from 'express';
 @Controller('documents')
 export class DocumentsController {
   constructor(
