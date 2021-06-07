@@ -23,7 +23,8 @@ import { DocumentsService } from './documents.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { Document, DocumentDocument } from './schemas/document.schema';
 import { Multer } from 'multer';
-import { Express } from 'express';
+import multer from 'multer';
+// import { Express } from 'express';
 @Controller('documents')
 export class DocumentsController {
   constructor(
@@ -46,7 +47,7 @@ export class DocumentsController {
   @UseGuards(JwtAuthenticationGuard)
   async create(
     @Body() createDocumentDto: CreateDocumentDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: multer.Express.Multer.File,
     @Req() req: Request,
   ) {
     // if (!req.user._id) {
