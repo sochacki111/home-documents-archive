@@ -54,12 +54,13 @@ export class AuthenticationService {
   public getCookieWithJwtToken(userId: mongoose.Schema.Types.ObjectId) {
     const payload: TokenPayload = { userId };
     const token = this.jwtService.sign(payload);
-    return `Authentication=${token}; Path=/; Max-Age=${this.configService.get(
-      'JWT_EXPIRATION_TIME',
-    )}`;
+    // return `Authentication=${token}; Path=/; Max-Age=${this.configService.get(
+    //   'JWT_EXPIRATION_TIME',
+    // )}`;
     // return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
     //   'JWT_EXPIRATION_TIME',
     // )}`;
+    return token;
   }
 
   public getCookieForLogOut() {

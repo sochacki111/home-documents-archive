@@ -43,7 +43,8 @@ export class AuthenticationController {
       'Access-Control-Allow-Headers',
       'Origin, X-Requested-With, Content-Type, Accept',
     );
-    response.setHeader('Set-Cookie', cookie);
+    response.setHeader('Access-Control-Expose-Headers', 'token');
+    response.setHeader('token', cookie);
     user.password = undefined;
     return response.send(user);
   }
