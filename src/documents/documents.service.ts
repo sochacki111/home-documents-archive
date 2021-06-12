@@ -15,7 +15,7 @@ export class DocumentsService {
       title: createDocumentDto.title,
       description: createDocumentDto.description,
       image: `https://${process.env.DOMAIN}/files/${createDocumentDto.image}`,
-      // image: `http://${process.env.DOMAIN}:${process.env.PORT}/files/${createDocumentDto.image}`,
+      image: `http://${process.env.DOMAIN}:${process.env.PORT}/files/${createDocumentDto.image}`,
       owner: createDocumentDto.owner,
     });
     return createdDocument.save();

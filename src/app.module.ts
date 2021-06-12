@@ -13,7 +13,7 @@ import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     // TODO Move to .env
-    MongooseModule.forRoot('mongodb://localhost:27017/home_documents_archive'),
+    MongooseModule.forRoot('mongodb://mongo/home_documents_archive'),
     DocumentsModule,
     MulterModule.register({
       dest: './files',
