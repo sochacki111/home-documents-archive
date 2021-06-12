@@ -4,6 +4,7 @@ import { DocumentsService } from './documents.service';
 import { Document, DocumentSchema } from './schemas/document.schema';
 import { DocumentsController } from './documents.controller';
 import { User, UserSchema } from 'src/users/schemas/user.schema';
+import { UsersService } from 'src/users/users.service';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { User, UserSchema } from 'src/users/schemas/user.schema';
       { name: User.name, schema: UserSchema },
     ]),
   ],
-  providers: [DocumentsService],
+  providers: [DocumentsService, UsersService],
   controllers: [DocumentsController],
 })
 export class DocumentsModule {}

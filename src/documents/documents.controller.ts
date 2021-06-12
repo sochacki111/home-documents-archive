@@ -20,14 +20,15 @@ import JwtAuthenticationGuard from 'src/authentication/jwt-authentication.guard'
 import { User, UserDocument } from 'src/users/schemas/user.schema';
 import { imageFileFilter, setFileName } from '../utils/file-upload.utils';
 import { DocumentsService } from './documents.service';
+import { UsersService } from '../users/users.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
+import { ShareDocumentDto } from './dto/share-document.dto';
 import { Document, DocumentDocument } from './schemas/document.schema';
-import { Express } from 'express';
-import { Multer } from 'multer';
 @Controller('documents')
 export class DocumentsController {
   constructor(
     private readonly documentsService: DocumentsService,
+    private readonly usersService: UsersService,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Document.name)
     private readonly documentModel: Model<DocumentDocument>,
@@ -49,12 +50,6 @@ export class DocumentsController {
     @UploadedFile() file: Express.Multer.File,
     @Req() req: Request,
   ) {
-    // if (!req.user._id) {
-    //   throw new HttpException(
-    //     'User without _id cannot save document',
-    //     HttpStatus.BAD_REQUEST,
-    //   );
-    // }
     const owner = (<any>req).user._id;
     // const owner = req.user._id;
 
@@ -115,5 +110,20 @@ export class DocumentsController {
   @UseGuards(JwtAuthenticationGuard)
   async findOne(@Param() params): Promise<Document> {
     return this.documentsService.findOne(params.id);
+  }
+
+  @Post('share')
+  async share(@Body() shareDocumentDto: ShareDocumentDto) {
+    const user = await this.usersService.getByEmail(
+      shareDocumentDto.shareEmail,
+    );
+    console.log('user', user);
+    const userId = user._id;
+    await this.userModel
+      .findByIdAndUpdate(user._id, {
+        $push: { documents: mongoose.Types.ObjectId(shareDocumentDto.documentId) },
+      })
+      .lean()
+      .exec();
   }
 }
