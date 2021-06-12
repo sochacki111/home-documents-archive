@@ -112,6 +112,7 @@ export class DocumentsController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthenticationGuard)
   async findOne(@Param() params): Promise<Document> {
     return this.documentsService.findOne(params.id);
   }
